@@ -1,8 +1,8 @@
 <?php
-const base_url = 'http://localhost/Sistema-Prestamos-main/';
+const base_url = 'http://localhost/Sistema-Prestamos/';
+const port = 3306;
 const host = 'localhost';
 const user = 'root';
-const pass = 'admin';
-const db = 'clarky_new';
+const pass = 'root';
+const db = 'db_clarky';
 const charset = 'charset=utf8';
-?>
