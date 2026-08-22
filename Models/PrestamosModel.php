@@ -31,9 +31,18 @@ class PrestamosModel extends Query
         return $data;
     }
 
+    // Consulta de porcentaje
+    public function getPorcentaje(int $id)
+    {
+        $sql = "SELECT porcentaje FROM rutas WHERE id = $id";
+        $data = $this->select($sql);
+        echo $data;
+        return $data;
+    }
+
     //Función para mostrar la lista de los usuarios
     public function getPrestamosTemp(int $id_ruta, string $fecharegistro)
-    { 
+    {
         //Al c.id se le coloca un alias ara que no muetre el id de las cajas, sino del id del trabajador 
         $sql = "SELECT p.*, c.id AS id_cantidad, c.cantidad, cl.id AS id_cliente, cl.cliente FROM prestamos p INNER JOIN cantidades c ON p.id_cantidad = c.id INNER JOIN clientes cl ON p.id_cliente = cl.id WHERE p.id_ruta = $id_ruta AND p.fecha_inicial = '$fecharegistro'";
         //Accedemos o se llama a la función o método select del Query
@@ -42,26 +51,27 @@ class PrestamosModel extends Query
     }
     //Función para mostrar la lista de los usuarios
     public function getPrestamos(int $id_ruta)
-    {  
-        
-       //Al c.id se le coloca un alias ara que no muetre el id de las cajas, sino del id del trabajador 
+    {
+
+        //Al c.id se le coloca un alias ara que no muetre el id de las cajas, sino del id del trabajador 
         $sql = "SELECT p.*, c.id AS id_cantidad, c.cantidad, cl.id AS id_cliente, cl.cliente FROM prestamos p INNER JOIN cantidades c ON p.id_cantidad = c.id INNER JOIN clientes cl ON p.id_cliente = cl.id WHERE p.id_ruta = $id_ruta";
-       //Accedemos o se llama a la función o método select del Query
+        //Accedemos o se llama a la función o método select del Query
         $data = $this->selectAll($sql);
         return $data;
     }
 
     //Se crea una función de registrar usuarios donde indicamos 4 parámetros que vienen del controlador usuarios.
-    public function registrarPrestamos(int $porcentaje, int $plazo, int $cantidad_dia, int $total_pago, string $fecha_inicio, string $fecha_final, string $hora_prestamo, int $id_grupo, int $id_cantidad, int $id_cliente, int $id_ruta){
+    public function registrarPrestamos(int $porcentaje, int $plazo, int $cantidad_dia, int $total_pago, string $fecha_inicio, string $fecha_final, string $hora_prestamo, int $id_grupo, int $id_cantidad, int $id_cliente, int $id_ruta)
+    {
         $this->porcentaje = $porcentaje;
         $this->plazo = $plazo;
         $this->cantidad_dia = $cantidad_dia;
         $this->total_pago = $total_pago;
         $this->fecha_inicio = $fecha_inicio;
-        $this->fecha_final =$fecha_final;
-        $this->hora_prestamo =$hora_prestamo;
-        $this->id_grupo =$id_grupo;
-        $this->id_cantidad =$id_cantidad;
+        $this->fecha_final = $fecha_final;
+        $this->hora_prestamo = $hora_prestamo;
+        $this->id_grupo = $id_grupo;
+        $this->id_cantidad = $id_cantidad;
         $this->id_cliente = $id_cliente;
         $this->id_ruta = $id_ruta;
         //Variable para verificar si hay usuarios ya existentes.    Donde la tabla trabajadores es igual al string del campo usuario
@@ -90,7 +100,8 @@ class PrestamosModel extends Query
         }
         return $res;
     }
-    public function registrarSaldo(int $saldo, int $saldo_vencido, string $fecha_saldo, int $id_cliente){
+    public function registrarSaldo(int $saldo, int $saldo_vencido, string $fecha_saldo, int $id_cliente)
+    {
         $this->saldo = $saldo;
         $this->saldo_vencido = $saldo_vencido;
         $this->fecha_saldo = $fecha_saldo;
@@ -120,33 +131,34 @@ class PrestamosModel extends Query
         }
         return $res;
     }
-    
+
     //Se crea una función de modificar usuarios (btn modificar), donde indicamos 4 parámetros que vienen del controlador usuarios
-    public function modificarPrestamos(int $porcentaje, int $plazo, int $cantidad_dia, int $total_pago, string $fecha_inicio, string $fecha_final, string $hora_prestamo, int $id_grupo, int $id_cantidad, int $id_cliente, int $id_ruta, int $id){
+    public function modificarPrestamos(int $porcentaje, int $plazo, int $cantidad_dia, int $total_pago, string $fecha_inicio, string $fecha_final, string $hora_prestamo, int $id_grupo, int $id_cantidad, int $id_cliente, int $id_ruta, int $id)
+    {
         $this->porcentaje = $porcentaje;
         $this->plazo = $plazo;
         $this->cantidad_dia = $cantidad_dia;
         $this->total_pago = $total_pago;
         $this->fecha_inicio = $fecha_inicio;
-        $this->fecha_final =$fecha_final;
-        $this->hora_prestamo =$hora_prestamo;
-        $this->id_grupo =$id_grupo;
-        $this->id_cantidad =$id_cantidad;
+        $this->fecha_final = $fecha_final;
+        $this->hora_prestamo = $hora_prestamo;
+        $this->id_grupo = $id_grupo;
+        $this->id_cantidad = $id_cantidad;
         $this->id_cliente = $id_cliente;
         $this->id_ruta = $id_ruta;
-        
+
         $this->id = $id;
-        
-         //Se crea una variable sql donde se hace la consulta de actualizar los datos. Actualiza de la tabla trabajadores los campos
+
+        //Se crea una variable sql donde se hace la consulta de actualizar los datos. Actualiza de la tabla trabajadores los campos
         $sql = "UPDATE prestamos SET plazo = ?, cantidad_dia = ?, total_pago = ?, fecha_inicio = ?, fecha_final = ?, hora_prestamo = ?, id_grupo = ?, id_cantidad = ? WHERE  id_cliente = ? AND id = ?";
 
-         //Se crea una variable que contiene el array donde indicamos las variables creadas con los this y esa variable se enviará a la carpeta config/App/Query.php
-        $datos = array($this->plazo, $this->cantidad_dia, $this->total_pago, $this->fecha_inicio, $this->fecha_final, $this->hora_prestamo, $this->id_grupo, $this->id_cantidad , $this->id_cliente, $this->id);
+        //Se crea una variable que contiene el array donde indicamos las variables creadas con los this y esa variable se enviará a la carpeta config/App/Query.php
+        $datos = array($this->plazo, $this->cantidad_dia, $this->total_pago, $this->fecha_inicio, $this->fecha_final, $this->hora_prestamo, $this->id_grupo, $this->id_cantidad, $this->id_cliente, $this->id);
 
-         //Accedemos o se llama a la función o método saveUser del Query
+        //Accedemos o se llama a la función o método saveUser del Query
         $data = $this->save($sql, $datos);
 
-         //Se hace la comprobación de guardar los registros
+        //Se hace la comprobación de guardar los registros
         if ($data == 1) {
             $res = "modificado";
         } else {
@@ -154,25 +166,26 @@ class PrestamosModel extends Query
         }
         return $res;
     }
-    
-    public function modificarSaldo(int $saldo, int $saldo_vencido, string $fecha_saldo, int $id_cliente, int $id){
+
+    public function modificarSaldo(int $saldo, int $saldo_vencido, string $fecha_saldo, int $id_cliente, int $id)
+    {
         $this->saldo = $saldo;
         $this->saldo_vencido = $saldo_vencido;
         $this->fecha_saldo = $fecha_saldo;
         $this->id_cliente = $id_cliente;
         $this->id = $id;
-        
-        
-         //Se crea una variable sql donde se hace la consulta de actualizar los datos. Actualiza de la tabla trabajadores los campos
+
+
+        //Se crea una variable sql donde se hace la consulta de actualizar los datos. Actualiza de la tabla trabajadores los campos
         $sql = "UPDATE saldos SET saldo = ?, saldo_vencido = ?, fecha_saldo = ? WHERE  id_cliente = ? AND id = ?";
 
-         //Se crea una variable que contiene el array donde indicamos las variables creadas con los this y esa variable se enviará a la carpeta config/App/Query.php
+        //Se crea una variable que contiene el array donde indicamos las variables creadas con los this y esa variable se enviará a la carpeta config/App/Query.php
         $datos = array($this->saldo, $this->saldo_vencido, $this->fecha_saldo, $this->id_cliente, $this->id);
 
-         //Accedemos o se llama a la función o método saveUser del Query
+        //Accedemos o se llama a la función o método saveUser del Query
         $data = $this->save($sql, $datos);
 
-         //Se hace la comprobación de guardar los registros
+        //Se hace la comprobación de guardar los registros
         if ($data == 1) {
             $res = "modificado";
         } else {
@@ -230,27 +243,27 @@ class PrestamosModel extends Query
         $this->cuotas_vencidas = $cuotas_vencidas;
         $this->dias_atraso = $dias_atraso;
         $this->fecha_pago = $fecha_pago;
-        $this->hora_pago= $hora_pago;
+        $this->hora_pago = $hora_pago;
         $this->fecha_hoy = date('Y-m-d'); //Este campo se registra en la bd. Pero le puse da('Y-m-d') para hacer mis pruebas, pero no lo lleva
         $this->id_grupo = $id_grupo;
         $this->id_cliente = $id_cliente;
         $this->id_prestamo = $id_prestamo;
         $this->id_ruta = $id_ruta;
-            //Se crea una variable sql donde se hace la consulta
-            $sql = "INSERT INTO pagos(pago, tipo_pago, cuotas_vencidas, dias_atraso, fecha_pago, hora_pago, fecha_hoy, id_grupo, id_cliente, id_ruta) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        //Se crea una variable sql donde se hace la consulta
+        $sql = "INSERT INTO pagos(pago, tipo_pago, cuotas_vencidas, dias_atraso, fecha_pago, hora_pago, fecha_hoy, id_grupo, id_cliente, id_ruta) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-            //Se crea una variable que contiene el array donde indicamos las variables creadas con los this y esa variable se enviará a la carpeta config/App/Query.php
-            $datos = array($this->pago, $this->tipo_pago, $this->cuotas_vencidas, $this->dias_atraso, $this->fecha_pago, $this->hora_pago, $this->fecha_hoy, $this->id_grupo, $this->id_cliente, $this->id_ruta);
+        //Se crea una variable que contiene el array donde indicamos las variables creadas con los this y esa variable se enviará a la carpeta config/App/Query.php
+        $datos = array($this->pago, $this->tipo_pago, $this->cuotas_vencidas, $this->dias_atraso, $this->fecha_pago, $this->hora_pago, $this->fecha_hoy, $this->id_grupo, $this->id_cliente, $this->id_ruta);
 
-            //Accedemos o se llama a la función o método saveUser del Query
-            $data = $this->save($sql, $datos);
+        //Accedemos o se llama a la función o método saveUser del Query
+        $data = $this->save($sql, $datos);
 
-            //Se hace la comprobación de guardar los registros
-            if ($data == 1) {
-                $res = "ok";
-            } else {
-                $res = "error";
-            }
+        //Se hace la comprobación de guardar los registros
+        if ($data == 1) {
+            $res = "ok";
+        } else {
+            $res = "error";
+        }
         return $res;
     }
 
@@ -260,20 +273,20 @@ class PrestamosModel extends Query
         $this->saldo = $saldo;
         $this->saldo_vencido = $saldo_vencido;
         $this->fecha_saldo = $fecha_saldo;
-         //Se crea una variable sql donde se hace la consulta de actualizar los datos. Actualiza de la tabla trabajadores los campos
+        //Se crea una variable sql donde se hace la consulta de actualizar los datos. Actualiza de la tabla trabajadores los campos
         $sql = "UPDATE saldos SET saldo = ?, saldo_vencido = ?, fecha_saldo = ? WHERE id_cliente = ?";
 
-         //Se crea una variable que contiene el array donde indicamos las variables creadas con los this y esa variable se enviará a la carpeta config/App/Query.php
+        //Se crea una variable que contiene el array donde indicamos las variables creadas con los this y esa variable se enviará a la carpeta config/App/Query.php
         $datos = array($this->saldo, $this->saldo_vencido, $this->fecha_saldo, $this->id_cliente);
 
-         //Accedemos o se llama a la función o método saveUser del Query
+        //Accedemos o se llama a la función o método saveUser del Query
         $data = $this->save($sql, $datos);
         if ($data == 1) {
             $res = "ok";
         } else {
             $res = "error";
         }
-    return $res;
+        return $res;
     }
 
     //Se crea una función del botón eliminar usuarios y poder visualizarlo en el index, donde indicamos 1 parámetro de tipo int que vienen del controlador usuarios. NOTA: Solo cambia el estado de actio a inactivo y viceversa
@@ -287,13 +300,12 @@ class PrestamosModel extends Query
         $sql = "UPDATE prestamos SET estado = ? WHERE id = ?";
 
         //Se crea una variable donde almacenan los arreglo que se le pasa al estado y al id
-        $datos = array($this->estado, $this->id); 
+        $datos = array($this->estado, $this->id);
 
         //Se crea una variable donde almacena el llamado al método select() donde se obtiene dos datos uno de tipo string ($sql) y un arreglo ($datos)
         $data = $this->save($sql, $datos);
 
         //Se retorna la variable
         return $data;
-
     }
 }

@@ -48,8 +48,9 @@ function registrarRuta(e) {
     const ruta = document.getElementById("ruta");
     const nombre = document.getElementById("nombre");
     const telefono = document.getElementById("telefono");
+    const porcentaje = document.getElementById("porcentaje");
 
-    if (ruta.value == "" || nombre.value == "" || telefono.value == "") {
+    if (ruta.value == "" || nombre.value == "" || telefono.value == "" || porcentaje.value == "") {
         //SweetAlert2. Su ruta está en el footer dentro de templates de Views. Es una alerta
         Swal.fire({
             position: 'top-end',
@@ -74,6 +75,8 @@ function registrarRuta(e) {
             //validación. Si el estatus es igual a 200 la respuesta está lista.
             if (this.readyState == 4 && this.status == 200) {
                 //Se convierte el mensaje a un JSON
+                console.log(JSON.parse(this.responseText));
+
                 const res = JSON.parse(this.responseText);
                 if (res == "si") {
                     Swal.fire({
@@ -152,11 +155,12 @@ function btnEditarRuta(id) {
             //Se lamacena los datos obtenidos accediendo a los documents para traer los id de cada input del index o vista. Y se le agrega la propiedad value donde será igual a la respuesta o lo que traiga del objeto JSON, concatenando a lo que se desea acceder de la bd 
             document.getElementById("ruta").value = res.ruta;
             document.getElementById("nombre").value = res.nombre;
+            document.getElementById("porcentaje").value = res.porcentaje;
             document.getElementById("telefono").value = res.telefono;
             document.getElementById("contrasena").value = res.clave;
             document.getElementById("caja").value = res.caja_inicial;
             document.getElementById("fecha_ruta").value = res.fecha_ruta;
-            
+
             document.getElementById("img-preview").src = base_url + 'Assets/img/' + res.foto;
 
             document.getElementById("icon-cerrar").innerHTML = '<button class="btn btn-danger" onclick = "deleteImg();"><i class="fas fa-times"></i></button>';
@@ -169,11 +173,11 @@ function btnEditarRuta(id) {
 
             document.getElementById("clave_actual").classList.remove("d-none");
             document.getElementById("fecha_caja").classList.remove("d-none");
-            
+
 
             //Se muestra el modal
             $("#nueva_ruta").modal("show");
-        } 
+        }
     }
 }
 
@@ -391,40 +395,40 @@ function btnListaCliente(id) {
     const http = new XMLHttpRequest();
     http.open('GET', url, true);
     http.send();
-    http.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        const res = JSON.parse(this.responseText);
-        console.log(this.responseText);
-        let htmlHeader = `<thead class="thead table-dark"><tr>
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const res = JSON.parse(this.responseText);
+            console.log(this.responseText);
+            let htmlHeader = `<thead class="thead table-dark"><tr>
         <th>ID</th>
         <th>Cliente</th>
         <th>Estado</th>
         <th>Fecha</th>
         </tr></thead>`;
-        let htmlBody = '';
+            let htmlBody = '';
             res.forEach(row => {
-                if (row['estado']==1) {
-                    
-                    htmlBody+=`<tr>
+                if (row['estado'] == 1) {
+
+                    htmlBody += `<tr>
                     <td>${row['id']}</td>
                     <td>${row['cliente']}</td>
-                    <td>${row['estado']='<span class="badge bg-success">Activo</span>'}</td>
+                    <td>${row['estado'] = '<span class="badge bg-success">Activo</span>'}</td>
                     <td>${row['fecha_registro']}</td>
                     </tr>`
-                }else{
-                    htmlBody+=`<tr>
+                } else {
+                    htmlBody += `<tr>
                     <td>${row['id']}</td>
                     <td>${row['cliente']}</td>
-                    <td>${row['estado']='<span class="badge bg-danger">Inactivo</span>'}</td>
+                    <td>${row['estado'] = '<span class="badge bg-danger">Inactivo</span>'}</td>
                     <td>${row['fecha_registro']}</td>
                     </tr>`
                 }
             });
-        
-          
-        document.getElementById("tblListaClientes").innerHTML = htmlHeader + '<tbody>' + htmlBody + '</tbody>';
-        $('#lista_cliente').modal('show');       
-      }
+
+
+            document.getElementById("tblListaClientes").innerHTML = htmlHeader + '<tbody>' + htmlBody + '</tbody>';
+            $('#lista_cliente').modal('show');
+        }
     };
 }
 
@@ -433,32 +437,32 @@ function btnListaReporte(id) {
     const http = new XMLHttpRequest();
     http.open('GET', url, true);
     http.send();
-    http.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        const res = JSON.parse(this.responseText);
-        console.log(this.responseText);
-        let htmlHeader = `<thead class="thead table-dark"><tr>
+    http.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const res = JSON.parse(this.responseText);
+            console.log(this.responseText);
+            let htmlHeader = `<thead class="thead table-dark"><tr>
         <th>ID</th>
         <th>Caja real</th>
         <th>Fecha</th>
         <th>Hora</th>
         <th></th>
         </tr></thead>`;
-        let htmlBody = '';
+            let htmlBody = '';
             res.forEach(row => {
-                    
-                    htmlBody+=`<tr>
+
+                htmlBody += `<tr>
                     <td>${row['id']}</td>
-                    <td>${"$ "+row['caja_real']}</td>
+                    <td>${"$ " + row['caja_real']}</td>
                     <td>${row['fecha_reporte']}</td>
                     <td>${row['hora_reporte']}</td>
-                    <td><a class="btn btn-danger" href="${base_url+"Reportes/generarPDF/"+row['id']}" target="_blank"><i class="fas fa-file-pdf"></i></a></td>
+                    <td><a class="btn btn-danger" href="${base_url + "Reportes/generarPDF/" + row['id']}" target="_blank"><i class="fas fa-file-pdf"></i></a></td>
                     </tr>`
             });
-        
-          
-        document.getElementById("tblListaReportes").innerHTML = htmlHeader + '<tbody>' + htmlBody + '</tbody>';
-        $('#lista_reporte').modal('show');       
-      }
+
+
+            document.getElementById("tblListaReportes").innerHTML = htmlHeader + '<tbody>' + htmlBody + '</tbody>';
+            $('#lista_reporte').modal('show');
+        }
     };
 }

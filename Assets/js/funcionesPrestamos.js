@@ -66,35 +66,35 @@ function calcularTotal() {
     var plazo = document.getElementById("plazo");
     var total = document.getElementById("total");
     var cantidad_dia = document.getElementById("cantidad_dia");
-    
+
     var cantidad = credito.options[credito.selectedIndex].text.replace("$ ", "");
     var porcentajeValor = porcentaje.value / 100;
     var plazoPago = parseInt(plazo.value);
     var totalValor = parseFloat(cantidad) * (1 + porcentajeValor);
     var costoDiarioValor = totalValor / plazoPago;
-    
+
     total.value = "$ " + totalValor.toFixed(2);
-    cantidad_dia.value ="$ " + costoDiarioValor.toFixed(2);
-    
+    cantidad_dia.value = "$ " + costoDiarioValor.toFixed(2);
+
     const fechaInicio = new Date();
     const fechaUltimoPago = new Date(fechaInicio.setDate(fechaInicio.getDate() + plazoPago));
     fechaUltimoPago.setDate(fechaUltimoPago.getDate() - 0); // Restamos un día para obtener la fecha del último pago
     const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
     const fechaFormato = fechaUltimoPago.toLocaleDateString('es-MX', options);
     document.getElementById('fecha_final').value = fechaFormato;
-  }
-  
-  document.addEventListener('DOMContentLoaded', function () {
+}
+
+document.addEventListener('DOMContentLoaded', function () {
     var plazoSelect = document.getElementById('plazo');
     plazoSelect.addEventListener('change', function () {
-      calcularTotal();
+        calcularTotal();
     });
-  });
+});
 
 
 function registrarPrestamo(e) {
     e.preventDefault();
-    
+
     const cliente = document.getElementById("cliente");
     const cantidad = document.getElementById("credito");
     const porcentaje = document.getElementById("porcentaje").value;
@@ -109,16 +109,17 @@ function registrarPrestamo(e) {
     calcularTotal();
     console.log("id cliente", cliente);
     console.log("Cantidad:", cantidad);
+    console.log("Porcentaje:", porcentaje);
     console.log("Total: ", total);
     console.log("Plazo:", plazo);
-    console.log("Cantidad dia:",cantidad_dia);
-    console.log("Inicio: ",fecha_inicio);
-    console.log("Final: ",fecha_final);
-    console.log("Hora: ",hora_prestamo);
+    console.log("Cantidad dia:", cantidad_dia);
+    console.log("Inicio: ", fecha_inicio);
+    console.log("Final: ", fecha_final);
+    console.log("Hora: ", hora_prestamo);
     console.log("id_grupo:", grupo);
     console.log("id:", id);
     if (cliente.value == "" || cantidad.value == "" || porcentaje.value == "" || total.value == "" || plazo.value == "" || cantidad_dia.value == "" || fecha_inicio.value == "" || fecha_final.value == "" || hora_prestamo.value == "" || grupo.value == "") {
-        
+
         Swal.fire({
             position: 'top-end',
             icon: 'error',
@@ -126,23 +127,24 @@ function registrarPrestamo(e) {
             showConfirmButton: false,
             timer: 3000
         })
-    } else {  
+    } else {
         const url = base_url + "Prestamos/registrar";
-        
+
         const frm = document.getElementById("frmPrestamos");
-        
+
         const http = new XMLHttpRequest();
 
         http.open("POST", url, true);
-        
+
         http.send(new FormData(frm));
-        
+
         ///Permanente
         http.onreadystatechange = function () {
-            
+
             if (this.readyState == 4 && this.status == 200) {
-                const res = JSON.parse(this.responseText);
+                console.log("Respuesta del servidor");
                 console.log(this.responseText);
+                const res = JSON.parse(this.responseText);
                 if (res == "si") {
                     Swal.fire({
                         position: 'top-end',
@@ -152,12 +154,12 @@ function registrarPrestamo(e) {
                         timer: 3000
                     })
                     frm.reset();
-                    
+
                     $("#nuevo_prestamo").modal("hide");
 
                     tblPrestamosTemp.ajax.reload();
 
-                    
+
                 } else if (res == "modificado") {
                     Swal.fire({
                         position: 'top-end',
@@ -167,7 +169,7 @@ function registrarPrestamo(e) {
                         timer: 3000
                     })
 
-                    
+
                     $("#nuevo_prestamo").modal("hide");
 
                     tblPrestamosTemp.ajax.reload();
@@ -191,7 +193,7 @@ function btnEditarPrestamo(id) {
     //Toma el id del h5 del modal del index Usuario y sustituye el título
     document.getElementById("title").innerHTML = "Crédito del cliente";
     document.getElementById("btnAccion").innerHTML = "Modificar";
-    
+
     //Mostrar los datos reistrados para modificar los datos
     //Se crea una constante que almacena la url y concatena con el controlador Usuarios y su método editar y se concatena el parárametro que su colocó en dentro de la función
     const url = base_url + "Prestamos/editar/" + id;
@@ -215,9 +217,9 @@ function btnEditarPrestamo(id) {
             //Se lamacena los datos obtenidos accediendo a los documents para traer los id de cada input del index o vista. Y se le agrega la propiedad value donde será igual a la respuesta o lo que traiga del objeto JSON, concatenando a lo que se desea acceder de la bd 
             document.getElementById("cliente").value = res.id_cliente;
             document.getElementById("porcentaje").value = res.porcentaje;
-            document.getElementById("total").value = "$"+""+res.total_pago;
+            document.getElementById("total").value = "$" + "" + res.total_pago;
             document.getElementById("plazo").value = res.plazo;
-            document.getElementById("cantidad_dia").value = "$"+""+res.cantidad_dias;
+            document.getElementById("cantidad_dia").value = "$" + "" + res.cantidad_dias;
             document.getElementById("fecha_inicio").value = res.fecha_inicial;
             document.getElementById("fecha_final").value = res.fecha_final;
             document.getElementById("hora_prestamo").value = res.hora_prestamo;
@@ -274,7 +276,7 @@ function btnPago(id) {
 
 function adelantarPagos(e) {
     e.preventDefault();
-    
+
     const pago = document.getElementById("pago").value;
     const tipo_pago = document.getElementById("tipo_pago").value;
     const saldo = document.getElementById("saldo1").value;
@@ -293,20 +295,20 @@ function adelantarPagos(e) {
             showConfirmButton: false,
             timer: 3000
         })
-    } else {  
+    } else {
         const url = base_url + "Prestamos/registrarPagosAdelanto";
-        
+
         const frm = document.getElementById("frmAdelantoPagos");
-        
+
         const http = new XMLHttpRequest();
 
         http.open("POST", url, true);
-        
+
         http.send(new FormData(frm));
-        
+
         ///Permanente
         http.onreadystatechange = function () {
-            
+
             if (this.readyState == 4 && this.status == 200) {
                 const res = JSON.parse(this.responseText);
                 console.log(this.responseText);
@@ -318,14 +320,14 @@ function adelantarPagos(e) {
                         showConfirmButton: false,
                         timer: 3000
                     })
-                
+
                     frm.reset();
-                    
+
                     $("#info_cliente").modal("hide");
 
                     tblPrestamos.ajax.reload();
 
-                    
+
                 } else {
                     Swal.fire({
                         position: 'top-end',

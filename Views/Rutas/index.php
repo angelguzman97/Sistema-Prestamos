@@ -35,40 +35,46 @@
             <div class="modal-body">
                 <!-- Formulario de ruta -->
                 <form id="frmRutas" method="post">
-                    
+
                     <div class="col-md-12">
-                            <div class="form-group">
-                                <label>Foto</label>
-                                <div class="card border-primary">
-                                    <div class="card-body">
-                                        <!--Se le coloca un id al label de la imagen-->
-                                        <label for="imagen" id="icon-image" class="btn btn-primary"><i class="fas fa-image"></i></label>
-                                        <!--Se le coloca un id al span para cerrar la imagen-->
-                                        <span id="icon-cerrar"></span>
-                                        <input id="imagen" class="d-none" type="file" name="imagen" onchange="preview(event);">
-                                        <!--Se crean dos inputs ocultos para saber si el usuario cambió o eliminó la imagen y se les coloca un id y sus name para llamarlos en los controladores por metodo POST-->
-                                        <input type="hidden" id="foto_actual" name="foto_actual">
-                                        <!--Se crea esta etiqueta para previsualizar la imagen a subir y se le coloca un id-->
-                                        <img class="img-thumbnail" id="img-preview">
-                                    </div>
+                        <div class="form-group">
+                            <label>Foto</label>
+                            <div class="card border-primary">
+                                <div class="card-body">
+                                    <!--Se le coloca un id al label de la imagen-->
+                                    <label for="imagen" id="icon-image" class="btn btn-primary"><i class="fas fa-image"></i></label>
+                                    <!--Se le coloca un id al span para cerrar la imagen-->
+                                    <span id="icon-cerrar"></span>
+                                    <input id="imagen" class="d-none" type="file" name="imagen" onchange="preview(event);">
+                                    <!--Se crean dos inputs ocultos para saber si el usuario cambió o eliminó la imagen y se les coloca un id y sus name para llamarlos en los controladores por metodo POST-->
+                                    <input type="hidden" id="foto_actual" name="foto_actual">
+                                    <!--Se crea esta etiqueta para previsualizar la imagen a subir y se le coloca un id-->
+                                    <img class="img-thumbnail" id="img-preview">
                                 </div>
                             </div>
                         </div>
-                    
+                    </div>
+
                     <div class="form-group">
                         <label for="ruta" class="fw-bold">Ruta</label>
                         <!--Esto es para mostrar el id en un input oculto agregado en cualquier parte del formulario-->
                         <input type="hidden" id="id" name="id"></input>
                         <input id="ruta" class="form-control w-50" type="text" name="ruta" placeholder="Ruta/Usuario">
                     </div>
+
                     <div class="form-group mt-2">
                         <label for="caja" class="fw-bold">Caja: $</label>
                         <input style="border-color:darkgray; width: 100px;" id="caja" type="number" name="caja" placeholder="Caja">
                     </div>
-                    
+
+                    <div class="form-group mt-2">
+                        <label for="porcentaje" class="fw-bold">Porcentaje a cobrar</label>
+                        <input style="border-color:darkgray; width: 100px;" id="porcentaje" name="porcentaje" type="number" placeholder="20">
+                    </div>
+
                     <div class="form-group mt-2" id="fecha_caja">
                         <label for="fecha" class="fw-bold">Fecha de la caja anterior:</label>
-                        <input id="fecha_ruta" style="border: 0; width: 130px;"  name="fecha_ruta" readonly></input>
+                        <input id="fecha_ruta" style="border: 0; width: 130px;" name="fecha_ruta" readonly></input>
                     </div>
                     <div class="form-group mt-2">
                         <label for="nombre" class="fw-bold">Nombre</label>
@@ -98,7 +104,7 @@
                             </div>
                         </div>
                     </div>
-                                       
+
                     <button class="btn btn-primary mt-2" type="button" onclick="registrarRuta(event);" id="btnAccion">Registrar</button>
                     <button class="btn btn-danger mt-2" type="button" data-bs-dismiss="modal">Cancelar</button>
                 </form>
@@ -120,7 +126,7 @@
             <div class="modal-body">
                 <table class="table table-responsive tblListaClientes" id="tblListaClientes">
                 </table>
-                 
+
             </div>
         </div>
     </div>
@@ -139,7 +145,7 @@
             <div class="modal-body">
                 <table class="table table-responsive tblListaReportes" id="tblListaReportes">
                 </table>
-                 
+
             </div>
         </div>
     </div>
